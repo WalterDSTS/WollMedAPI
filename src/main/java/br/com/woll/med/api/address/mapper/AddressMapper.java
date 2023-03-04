@@ -17,5 +17,16 @@ public class AddressMapper {
         .build();
   }
 
-//  public static AddressDto toAddressDto(Address address) {}
+  public static AddressDto toAddressDto(Address address) {
+    return AddressDto
+        .builder()
+        .street(address.getStreet())
+        .number(address.getNumber())
+        .neighborhood(address.getNeighborhood())
+        .cep(address.getCep())
+        .city(address.getCity())
+        .uf(address.getUf())
+        .complement(address.getComplement())
+        .build();
+  }
 }

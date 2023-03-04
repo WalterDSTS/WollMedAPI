@@ -11,8 +11,11 @@ import br.com.woll.med.api.doctor.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,9 +26,13 @@ public class DoctorServiceImplementation implements DoctorService {
   private final DoctorRepository repository;
 
   @Override
-  public void createNewDoctor(DoctorDto doctorDto) {
+  public ResponseEntity createNewDoctor(DoctorDto doctorDto, UriComponentsBuilder uriBuilder) {
     Doctor doctor = DoctorMapper.toDoctor(doctorDto);
     repository.save(doctor);
+
+    URI uri = uriBuilder.path("/api/v1/doctor/{id}").buildAndExpand(doctor.getId()).toUri();
+
+    return ResponseEntity.created(uri).body(DoctorMapper.toDoctorDto(doctor));
   }
 
   @Override
@@ -45,7 +52,13 @@ public class DoctorServiceImplementation implements DoctorService {
   }
 
   @Override
-  public void updateDoctor(EditDoctorDto editDoctorDto) {
+  public DoctorDto detailData(UUID id) {
+    Doctor doctor = repository.getReferenceById(id);
+    return DoctorMapper.toDoctorDto(doctor);
+  }
+
+  @Override
+  public DoctorDto updateDoctor(EditDoctorDto editDoctorDto) {
     Doctor doctor = repository.getReferenceById(editDoctorDto.getId());
 
     if(editDoctorDto.getName() != null) doctor.setName(editDoctorDto.getName());
@@ -76,6 +89,8 @@ public class DoctorServiceImplementation implements DoctorService {
         address.setComplement(editDoctorDto.getAddressDto().getComplement());
       }
     }
+
+    return DoctorMapper.toDoctorDto(doctor);
   }
 
   @Override
