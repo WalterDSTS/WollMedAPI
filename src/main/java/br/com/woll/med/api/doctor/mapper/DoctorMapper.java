@@ -28,7 +28,6 @@ public class DoctorMapper {
     return DoctorDto
         .builder()
         .name(doctor.getName())
-        .name(doctor.getName())
         .email(doctor.getEmail())
         .phone(doctor.getPhone())
         .crm(doctor.getCrm())

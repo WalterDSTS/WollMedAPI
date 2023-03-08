@@ -15,7 +15,6 @@ import javax.validation.constraints.Pattern;
 public class AddressDto {
   @NotBlank
   private String street;
-  @NotBlank
   private String number;
   @NotBlank
   private String neighborhood;
