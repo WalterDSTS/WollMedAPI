@@ -1,5 +1,6 @@
 package br.com.woll.med.api.exception.handler;
 
+import br.com.woll.med.api.exception.ValidationException;
 import br.com.woll.med.api.exception.dto.ValidationErrorData;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -26,5 +27,10 @@ public class RestExceptionHandler {
             .stream()
             .map(ValidationErrorData::new)
             .collect(Collectors.toList()));
+  }
+
+  @ExceptionHandler(ValidationException.class)
+  public ResponseEntity handleBusinessRuleError(ValidationException ex) {
+    return ResponseEntity.badRequest().body(ex.getMessage());
   }
 }
